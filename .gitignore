@@ -30,4 +30,3 @@ hs_err_pid*
 log/
 target/
 dependency-reduced-pom.xml
-src/
