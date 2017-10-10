@@ -22,6 +22,7 @@ hs_err_pid*
 *.iml
 *.iws
 
+
 # Mac
 .DS_Store
 
@@ -29,3 +30,6 @@ hs_err_pid*
 log/
 target/
 dependency-reduced-pom.xml
+
+#Configuration
+*.properties
