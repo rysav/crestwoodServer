@@ -2,6 +2,8 @@ package com.crestwood.model;
 
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 
 /**
@@ -11,12 +13,15 @@ import javax.persistence.*;
 @Table(name = "user")
 public class User {
     @Id
+    @ApiModelProperty(required = true)
     private int userId;
 
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
+
+    @ApiModelProperty(required = true)
     private boolean parkingPass;
     private int unit;
     private int contractId;

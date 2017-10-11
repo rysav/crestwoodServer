@@ -13,7 +13,7 @@ import java.util.List;
  * Created by ryan on 10/9/17.
  */
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends com.crestwood.service.Service implements UserService {
 
     private final UserRepository userRepository;
 
@@ -53,7 +53,11 @@ public class UserServiceImpl implements UserService {
         if (temp == null) {
             throw new NotFoundException("User does not exist");
         }
-        userRepository.save(user);
+        try {
+            userRepository.save((User)updateObject(user, temp));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
