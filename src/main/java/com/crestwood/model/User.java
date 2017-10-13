@@ -13,7 +13,8 @@ import javax.persistence.*;
 @Table(name = "user")
 public class User {
     @Id
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(hidden = true)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int userId;
 
     private String firstName;

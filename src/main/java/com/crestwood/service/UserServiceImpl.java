@@ -38,6 +38,11 @@ public class UserServiceImpl extends com.crestwood.service.Service implements Us
     }
 
     @Override
+    public List<User> getUserByName(String firstName, String lastName) {
+        return (List<User>) userRepository.findByFirstNameAndLastName(firstName, lastName);
+    }
+
+    @Override
     public void addUser(User user) throws AlreadyExistsException {
         User temp = userRepository.findOne(user.getUserId());
         if (temp != null) {
@@ -48,8 +53,8 @@ public class UserServiceImpl extends com.crestwood.service.Service implements Us
     }
 
     @Override
-    public void updateUser(User user) throws NotFoundException {
-        User temp = userRepository.findOne(user.getUserId());
+    public void updateUser(int userId, User user) throws NotFoundException {
+        User temp = userRepository.findOne(userId);
         if (temp == null) {
             throw new NotFoundException("User does not exist");
         }

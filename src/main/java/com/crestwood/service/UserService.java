@@ -13,7 +13,8 @@ public interface UserService {
 
     List<User> getAllUsers();
     User getUser(int userId) throws NotFoundException;
+    List<User> getUserByName(String firstName, String lastName);
     void addUser(User user) throws AlreadyExistsException;
-    void updateUser(User user) throws NotFoundException;
+    void updateUser(int userId, User user) throws NotFoundException;
     void deleteUser(int userId) throws NotFoundException;
 }

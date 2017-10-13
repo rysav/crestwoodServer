@@ -49,8 +49,8 @@ public class UserController {
 
     @ApiOperation(value = "update user")
     @RequestMapping(method = RequestMethod.PUT)
-    void updateUser(User user) throws NotFoundException {
-        userService.updateUser(user);
+    void updateUser(int userId, User user) throws NotFoundException {
+        userService.updateUser(userId, user);
     }
 
     @ApiOperation(value = "removes user by Id", response = Iterable.class)
