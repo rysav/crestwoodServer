@@ -7,6 +7,7 @@ import com.crestwood.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,10 +38,7 @@ public class UserServiceImpl extends com.crestwood.service.Service implements Us
         return temp;
     }
 
-    @Override
-    public List<User> getUserByName(String firstName, String lastName) {
-        return (List<User>) userRepository.findByFirstNameAndLastName(firstName, lastName);
-    }
+
 
     @Override
     public void addUser(User user) throws AlreadyExistsException {
@@ -72,5 +70,25 @@ public class UserServiceImpl extends com.crestwood.service.Service implements Us
             throw new NotFoundException("User does not exist");
         }
         userRepository.delete(userId);
+    }
+
+    @Override
+    public List<User> getPossibleUsers(String subString) {
+        List<User> users = (List<User>) userRepository.findAll();
+        List<User> toReturn = new ArrayList<User>();
+        for (User u : users) {
+            String fullName = u.getFirstName().toLowerCase() + " " + u.getLastName().toLowerCase();
+            if (fullName.startsWith(subString.toLowerCase())) {
+                toReturn.add(u);
+            }
+        }
+
+        for (User u : users) {
+            String fullName = u.getFirstName().toLowerCase() + " " + u.getLastName().toLowerCase();
+            if (!fullName.startsWith(subString.toLowerCase()) && fullName.contains(subString.toLowerCase())) {
+                toReturn.add(u);
+            }
+        }
+        return toReturn;
     }
 }

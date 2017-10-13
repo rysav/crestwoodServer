@@ -41,6 +41,12 @@ public class UserController {
         return userService.getUser(userId);
     }
 
+    @ApiOperation(value = "gets all users whos name starts with the input or contains the input", response = Iterable.class)
+    @RequestMapping(value="/search", method = RequestMethod.GET)
+    List<User> getPossibleUsers(String subString) {
+        return userService.getPossibleUsers(subString);
+    }
+
     @ApiOperation(value = "adds user")
     @RequestMapping(method = RequestMethod.POST)
     void addUser(User user) throws AlreadyExistsException {

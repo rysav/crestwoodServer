@@ -5,6 +5,7 @@ package com.crestwood.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by ryan on 10/9/17.
@@ -26,6 +27,8 @@ public class User {
     private boolean parkingPass;
     private int unit;
     private int contractId;
+    private String gender;
+    private Date birthday;
 
 
     public int getUserId() {
@@ -90,5 +93,21 @@ public class User {
 
     public void setContractId(int contractId) {
         this.contractId = contractId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 }
