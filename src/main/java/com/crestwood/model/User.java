@@ -29,6 +29,8 @@ public class User {
     private int contractId;
     private String gender;
     private Date birthday;
+    private double amountDue;
+    private int paymentPlan;
 
 
     public int getUserId() {
@@ -109,5 +111,21 @@ public class User {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public double getAmountDue() {
+        return amountDue;
+    }
+
+    public void setAmountDue(double amountDue) {
+        this.amountDue = amountDue;
+    }
+
+    public int getPaymentPlan() {
+        return paymentPlan;
+    }
+
+    public void setPaymentPlan(int paymentPlan) {
+        this.paymentPlan = paymentPlan;
     }
 }

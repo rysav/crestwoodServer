@@ -1,15 +1,14 @@
 package com.crestwood.persistance;
 
-import com.crestwood.model.User;
+import com.crestwood.model.PaymentPlan;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 /**
- * Created by ryan on 10/9/17.
+ * Created by ryan on 10/14/17.
  */
 @Transactional
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface PaymentPlanRepository extends CrudRepository<PaymentPlan, Integer> {
 
 }
