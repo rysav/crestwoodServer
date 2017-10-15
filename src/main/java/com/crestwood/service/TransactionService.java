@@ -1,5 +1,6 @@
 package com.crestwood.service;
 
+import com.crestwood.exceptions.NotFoundException;
 import com.crestwood.model.Transaction;
 
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
  */
 public interface TransactionService {
     List<Transaction> getAll();
-    Transaction getById(int id);
+    Transaction getById(int id) throws NotFoundException;
     void add(Transaction transaction);
-    void update(int id, Transaction transaction);
-    void delete(int id);
+    void update(int id, Transaction transaction) throws NotFoundException;
+    void delete(int id) throws NotFoundException;
 }

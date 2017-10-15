@@ -22,7 +22,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(regex("/users.*"))
+                .paths(regex("/*.*"))
                 .build()
                 .apiInfo(metaData());
     }

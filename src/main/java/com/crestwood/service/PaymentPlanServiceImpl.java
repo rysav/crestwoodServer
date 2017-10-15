@@ -2,9 +2,7 @@ package com.crestwood.service;
 
 import com.crestwood.exceptions.NotFoundException;
 import com.crestwood.model.PaymentPlan;
-import com.crestwood.model.User;
 import com.crestwood.persistance.PaymentPlanRepository;
-import com.crestwood.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -12,6 +10,7 @@ import java.util.List;
 /**
  * Created by ryan on 10/14/17.
  */
+@org.springframework.stereotype.Service("paymentPlanService")
 public class PaymentPlanServiceImpl extends Service implements PaymentPlanService {
 
 
