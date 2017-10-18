@@ -10,6 +10,6 @@ import java.util.List;
  * Created by ryan on 10/9/17.
  */
 @Transactional
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends CrudRepository<User, String> {
 
 }

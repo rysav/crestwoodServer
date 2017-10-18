@@ -14,4 +14,6 @@ public interface TransactionService {
     void add(Transaction transaction);
     void update(int id, Transaction transaction) throws NotFoundException;
     void delete(int id) throws NotFoundException;
+
+    List<Transaction> getByUserId(String userId);
 }

@@ -36,28 +36,33 @@ public class TransactionController {
     }
 
     @ApiOperation(value = "gets transaction by Id", response = Iterable.class)
-    @RequestMapping(value="{transactionId}", method = RequestMethod.GET)
-    Transaction getUser(int id) throws NotFoundException {
+    @RequestMapping(value="{id}", method = RequestMethod.GET)
+    Transaction getTransaction(int id) throws NotFoundException {
         return transactionService.getById(id);
     }
 
-
-
     @ApiOperation(value = "adds transaction")
     @RequestMapping(method = RequestMethod.POST)
-    void add(Transaction paymentPlan) throws AlreadyExistsException {
-        transactionService.add(paymentPlan);
+    void add(Transaction transaction) throws AlreadyExistsException {
+        transactionService.add(transaction);
     }
 
     @ApiOperation(value = "update transaction")
     @RequestMapping(method = RequestMethod.PUT)
-    void update(int id, Transaction paymentPlan) throws NotFoundException {
-        transactionService.update(id, paymentPlan);
+    void update(int id, Transaction transaction) throws NotFoundException {
+        transactionService.update(id, transaction);
     }
 
     @ApiOperation(value = "removes transaction by Id", response = Iterable.class)
     @RequestMapping(method = RequestMethod.DELETE)
     void delete(int id) throws NotFoundException {
         transactionService.delete(id);
+    }
+
+
+    @ApiOperation(value = "gets all transactions for a given user", response = Iterable.class)
+    @RequestMapping(value="/{userId}", method = RequestMethod.GET)
+    List<Transaction> getTransactionsByUserId(String userId) {
+        return transactionService.getByUserId(userId);
     }
 }

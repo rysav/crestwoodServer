@@ -3,6 +3,7 @@ package com.crestwood.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -15,7 +16,8 @@ public class Transaction {
     @ApiModelProperty(hidden = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int transactionId;
-    private int userId;
+    private int transactionNum;
+    private String userId;
     private Date time;
     private double amount;
     private String description;
@@ -27,15 +29,23 @@ public class Transaction {
         return transactionId;
     }
 
-    public void setTransactionId(int transactionId) {
-        this.transactionId = transactionId;
+    public void setTransactionId(int id) {
+        this.transactionId = id;
     }
 
-    public int getUserId() {
+    public int getTransactionNum() {
+        return transactionNum;
+    }
+
+    public void setTransactionNum(int transactionNum) {
+        this.transactionNum = transactionNum;
+    }
+
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

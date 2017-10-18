@@ -14,9 +14,8 @@ import java.util.Date;
 @Table(name = "user")
 public class User {
     @Id
-    @ApiModelProperty(hidden = true)
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private int userId;
+    @ApiModelProperty(required = true)
+    private String userId;
 
     private String firstName;
     private String lastName;
@@ -33,11 +32,11 @@ public class User {
     private int paymentPlan;
 
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

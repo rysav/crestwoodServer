@@ -66,4 +66,10 @@ public class TransactionServiceImpl extends Service implements TransactionServic
         }
         transactionRepository.delete(id);
     }
+
+    @Override
+    public List<Transaction> getByUserId(String userId)  {
+
+        return transactionRepository.findByUserIdLike(userId);
+    }
 }

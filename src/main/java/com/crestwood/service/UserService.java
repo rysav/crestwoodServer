@@ -12,9 +12,9 @@ import java.util.List;
 public interface UserService {
 
     List<User> getAllUsers();
-    User getUser(int userId) throws NotFoundException;
+    User getUser(String userId) throws NotFoundException;
     void addUser(User user) throws AlreadyExistsException;
-    void updateUser(int userId, User user) throws NotFoundException;
-    void deleteUser(int userId) throws NotFoundException;
+    void updateUser(User user) throws NotFoundException;
+    void deleteUser(String userId) throws NotFoundException;
     List<User> getPossibleUsers(String subString);
 }

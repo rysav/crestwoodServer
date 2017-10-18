@@ -37,7 +37,7 @@ public class UserController {
 
     @ApiOperation(value = "gets user by Id", response = Iterable.class)
     @RequestMapping(value="{userId}", method = RequestMethod.GET)
-    User getUser(int userId) throws NotFoundException {
+    User getUser(String userId) throws NotFoundException {
         return userService.getUser(userId);
     }
 
@@ -55,13 +55,13 @@ public class UserController {
 
     @ApiOperation(value = "update user")
     @RequestMapping(method = RequestMethod.PUT)
-    void updateUser(int userId, User user) throws NotFoundException {
-        userService.updateUser(userId, user);
+    void updateUser(User user) throws NotFoundException {
+        userService.updateUser(user);
     }
 
     @ApiOperation(value = "removes user by Id", response = Iterable.class)
     @RequestMapping(method = RequestMethod.DELETE)
-    void deleteUser(int userId) throws NotFoundException {
+    void deleteUser(String userId) throws NotFoundException {
         userService.deleteUser(userId);
     }
 }
