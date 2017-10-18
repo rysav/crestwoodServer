@@ -39,7 +39,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         //check for if they paid too much?
         Transaction transaction = new Transaction();
         transaction.setUserId(userId);
-        transaction.setAmount(amountPaid);
+        transaction.setAmount(0 - amountPaid);
         transaction.setMethod("Online");
         transaction.setDescription(notes);
         transaction.setTransactionNum(transactionNum);
@@ -61,7 +61,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         user.setAmountDue(user.getAmountDue() + amountCharge);
         Transaction transaction = new Transaction();
         transaction.setUserId(userId);
-        transaction.setAmount(0 - amountCharge);
+        transaction.setAmount(amountCharge);
         transaction.setMethod("Online");
         transaction.setDescription(notes);
         transaction.setTransactionNum(-1);
