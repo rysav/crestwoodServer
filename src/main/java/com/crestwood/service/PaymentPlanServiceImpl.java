@@ -66,4 +66,11 @@ public class PaymentPlanServiceImpl extends Service implements PaymentPlanServic
         }
         paymentPlanRepository.delete(id);
     }
+
+    @Override
+    public PaymentPlan getPayPlanByUserId(String userId) {
+
+
+        return null;
+    }
 }

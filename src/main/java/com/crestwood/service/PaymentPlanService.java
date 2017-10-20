@@ -14,4 +14,6 @@ public interface PaymentPlanService {
     void add(PaymentPlan paymentPlan);
     void update(int id, PaymentPlan paymentPlan) throws NotFoundException;
     void delete(int id) throws NotFoundException;
+
+    PaymentPlan getPayPlanByUserId(String userId);
 }

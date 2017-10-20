@@ -1,15 +1,17 @@
 package com.crestwood.service;
 
 import com.crestwood.exceptions.NotFoundException;
+import com.crestwood.mail.GoogleMail;
 import com.crestwood.model.PaymentDetails;
 import com.crestwood.model.Transaction;
 import com.crestwood.model.User;
+import com.crestwood.persistance.PaymentPlanRepository;
 import com.crestwood.persistance.TransactionRepository;
 import com.crestwood.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.mail.MessagingException;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
@@ -21,13 +23,15 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
+    private final PaymentPlanRepository paymentPlanRepository;
     private final UserService userService;
     private final TransactionService transactionService;
 
     @Autowired
-    public PaymentServiceImpl(UserRepository userRepository, TransactionRepository transactionRepository, UserService userService, TransactionService transactionService) {
+    public PaymentServiceImpl(UserRepository userRepository, TransactionRepository transactionRepository, PaymentPlanRepository paymentPlanRepository, UserService userService, TransactionService transactionService) {
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.paymentPlanRepository = paymentPlanRepository;
         this.userService = userService;
         this.transactionService = transactionService;
     }
@@ -51,6 +55,11 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
     @Override
     public PaymentDetails getPaymentDetails(String userId) throws NotFoundException {
+        try {
+            GoogleMail.Send("ryssavage", "Whale24135", "ryssavage@gmail.com", "test auto email", "hey you are awesome");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         return new PaymentDetails(userService.getUser(userId).getAmountDue(), transactionService.getByUserId(userId));
     }
 
@@ -69,5 +78,14 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
         userService.updateUser(user);
         transactionService.add(transaction);
+    }
+
+    @Override
+    public void updatePayments() {
+
+
+
+
+
     }
 }

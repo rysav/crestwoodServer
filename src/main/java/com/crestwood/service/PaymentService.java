@@ -13,4 +13,5 @@ public interface PaymentService {
     void makePayment(String userId, double amountPaid, int transactionNum, Date timeStamp, String notes) throws NotFoundException;
     PaymentDetails getPaymentDetails(String userId) throws NotFoundException;
     void addCharge(String userId, double amountCharge, String notes) throws NotFoundException;
+    void updatePayments();
 }
