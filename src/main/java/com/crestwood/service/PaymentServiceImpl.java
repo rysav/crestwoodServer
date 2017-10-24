@@ -3,6 +3,7 @@ package com.crestwood.service;
 import com.crestwood.exceptions.NotFoundException;
 import com.crestwood.mail.GoogleMail;
 import com.crestwood.model.PaymentDetails;
+import com.crestwood.model.PaymentPlan;
 import com.crestwood.model.Transaction;
 import com.crestwood.model.User;
 import com.crestwood.persistance.PaymentPlanRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.mail.MessagingException;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by ryan on 10/18/17.
@@ -82,8 +84,19 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
     @Override
     public void updatePayments() {
-
-
+        Calendar cal = Calendar.getInstance();
+        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+        int numDaysThisMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        List<User> users = userService.getAllUsers();
+        for (User u: users) {
+            PaymentPlan pp = u.getPaymentPlan();
+            if (pp.getDueDate() == dayOfMonth) {
+                //add rent charge
+            }
+            else if (dayOfMonth == (pp.getDueDate() + pp.getGracePeriod()) % numDaysThisMonth && u.getAmountDue() >= pp.getPayment()) {
+                //add late fee charge --- note that this means partial payments would avoid late fee this month
+            }
+        }
 
 
 

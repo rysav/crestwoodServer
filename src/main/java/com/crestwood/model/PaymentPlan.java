@@ -3,13 +3,15 @@ package com.crestwood.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by ryan on 10/14/17.
  */
 @Entity
 @Table(name = "paymentPlan")
-public class PaymentPlan {
+public class PaymentPlan implements Serializable{
     @Id
     @ApiModelProperty(hidden = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +20,10 @@ public class PaymentPlan {
     private int dueDate;
     private int gracePeriod;
 
+    @OneToMany(mappedBy = "paymentPlan", fetch=FetchType.LAZY)
+    private Collection<User> users;
+
+    public PaymentPlan(){};
 
     public int getId() {
         return id;

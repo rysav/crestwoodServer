@@ -5,7 +5,7 @@ package com.crestwood.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by ryan on 10/9/17.
@@ -27,10 +27,23 @@ public class User {
     private int unit;
     private int contractId;
     private String gender;
+    @ApiModelProperty(dataType = "org.joda.time.LocalDate")
     private Date birthday;
     private double amountDue;
-    private int paymentPlan;
+    @Column(name = "paymentPlan")
+    private int paymentPlanId;
+    @ManyToOne
+    @MapsId("paymentPlanId")
+    private PaymentPlan paymentPlan;
 
+
+    public int getPaymentPlanId() {
+        return paymentPlanId;
+    }
+
+    public void setPaymentPlanId(int paymentPlanId) {
+        this.paymentPlanId = paymentPlanId;
+    }
 
     public String getUserId() {
         return userId;
@@ -120,11 +133,11 @@ public class User {
         this.amountDue = amountDue;
     }
 
-    public int getPaymentPlan() {
+    public PaymentPlan getPaymentPlan() {
         return paymentPlan;
     }
 
-    public void setPaymentPlan(int paymentPlan) {
+    /*public void setPaymentPlan(PaymentPlan paymentPlan) {
         this.paymentPlan = paymentPlan;
-    }
+    }*/
 }

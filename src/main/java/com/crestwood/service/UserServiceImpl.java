@@ -25,6 +25,7 @@ public class UserServiceImpl extends com.crestwood.service.Service implements Us
 
     @Override
     public List<User> getAllUsers() {
+
         return (List<User>) userRepository.findAll();
     }
 
