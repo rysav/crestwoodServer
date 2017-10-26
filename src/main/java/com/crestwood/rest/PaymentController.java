@@ -30,7 +30,7 @@ public class PaymentController {
 
     @ApiOperation(value = "Makes payment for specific user", response = Iterable.class)
     @RequestMapping(value="/makePayment", method = RequestMethod.POST)
-    void makePayment(String userId, double amountPaid, int transactionNum, Date timeStamp, String notes) throws NotFoundException {
+    void makePayment(String userId, double amountPaid, String transactionNum, Date timeStamp, String notes) throws NotFoundException {
          paymentService.makePayment(userId, amountPaid, transactionNum, timeStamp, notes);
     }
 

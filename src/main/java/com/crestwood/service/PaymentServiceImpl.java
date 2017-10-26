@@ -39,7 +39,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     }
 
     @Override
-    public void makePayment(String userId, double amountPaid, int transactionNum, java.util.Date timeStamp, String notes) throws NotFoundException {
+    public void makePayment(String userId, double amountPaid, String transactionNum, java.util.Date timeStamp, String notes) throws NotFoundException {
         User user = userService.getUser(userId);
         user.setAmountDue(user.getAmountDue() - amountPaid);
         //check for if they paid too much?
@@ -57,11 +57,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
     @Override
     public PaymentDetails getPaymentDetails(String userId) throws NotFoundException {
-        try {
-            GoogleMail.Send("ryssavage", "Whale24135", "ryssavage@gmail.com", "test auto email", "hey you are awesome");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+
         return new PaymentDetails(userService.getUser(userId).getAmountDue(), transactionService.getByUserId(userId));
     }
 
@@ -75,7 +71,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         transaction.setAmount(amountCharge);
         transaction.setMethod("Online");
         transaction.setDescription(notes);
-        transaction.setTransactionNum(-1);
+        transaction.setTransactionNum("Auto");
         transaction.setTime(new Date(Calendar.getInstance().getTime().getTime()));
 
         userService.updateUser(user);

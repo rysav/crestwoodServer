@@ -16,7 +16,7 @@ public class Transaction {
     @ApiModelProperty(hidden = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int transactionId;
-    private int transactionNum;
+    private String transactionNum;
     private String userId;
     private Date time;
     private double amount;
@@ -33,11 +33,11 @@ public class Transaction {
         this.transactionId = id;
     }
 
-    public int getTransactionNum() {
+    public String getTransactionNum() {
         return transactionNum;
     }
 
-    public void setTransactionNum(int transactionNum) {
+    public void setTransactionNum(String transactionNum) {
         this.transactionNum = transactionNum;
     }
 
