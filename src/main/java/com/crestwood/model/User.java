@@ -35,7 +35,37 @@ public class User {
     @ManyToOne
     @MapsId("paymentPlanId")
     private PaymentPlan paymentPlan;
+    private String customerStripeHash;
+    private String bankAccountHash;
+    @ApiModelProperty(required = true)
+    private boolean verifiedBankAccount;
 
+
+
+
+    public String getCustomerStripeHash() {
+        return customerStripeHash;
+    }
+
+    public void setCustomerStripeHash(String customerStripeHash) {
+        this.customerStripeHash = customerStripeHash;
+    }
+
+    public String getBankAccountHash() {
+        return bankAccountHash;
+    }
+
+    public void setBankAccountHash(String bankAccountHash) {
+        this.bankAccountHash = bankAccountHash;
+    }
+
+    public boolean isVerifiedBankAccount() {
+        return verifiedBankAccount;
+    }
+
+    public void setVerifiedBankAccount(boolean verifiedBankAccount) {
+        this.verifiedBankAccount = verifiedBankAccount;
+    }
 
     public int getPaymentPlanId() {
         return paymentPlanId;

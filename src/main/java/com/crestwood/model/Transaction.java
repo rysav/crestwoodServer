@@ -1,6 +1,7 @@
 package com.crestwood.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -18,6 +19,8 @@ public class Transaction {
     private int transactionId;
     private String transactionNum;
     private String userId;
+    //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    //@DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss.SSSZ")
     private Date time;
     private double amount;
     private String description;

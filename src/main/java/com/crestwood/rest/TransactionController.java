@@ -7,6 +7,7 @@ import com.crestwood.service.TransactionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +44,7 @@ public class TransactionController {
 
     @ApiOperation(value = "adds transaction")
     @RequestMapping(method = RequestMethod.POST)
-    void add(Transaction transaction) throws AlreadyExistsException {
+    void add( Transaction transaction) throws AlreadyExistsException {
         transactionService.add(transaction);
     }
 

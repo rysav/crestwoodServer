@@ -10,6 +10,8 @@ import com.crestwood.persistance.PaymentPlanRepository;
 import com.crestwood.persistance.TransactionRepository;
 import com.crestwood.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.mail.MessagingException;
 import java.sql.Date;
@@ -28,6 +30,11 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     private final PaymentPlanRepository paymentPlanRepository;
     private final UserService userService;
     private final TransactionService transactionService;
+
+    @Value("${email.username}")
+    private String username;
+    @Value("${email.password}")
+    private String password;
 
     @Autowired
     public PaymentServiceImpl(UserRepository userRepository, TransactionRepository transactionRepository, PaymentPlanRepository paymentPlanRepository, UserService userService, TransactionService transactionService) {
@@ -53,6 +60,13 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
         userService.updateUser(user);
         transactionService.add(transaction);
+        String emailMessage = "Your payment of " + amountPaid + " has been received and recorded.";
+
+        try {
+            GoogleMail.Send(username, password, user.getEmail(), "Payment Confirmation", emailMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
