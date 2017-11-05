@@ -31,7 +31,7 @@ public class PaymentUpdater {
 
     @Scheduled(cron = "${my.cron.paymentUpdater}")
     public void updatePayments() {
-        //paymentService.updatePayments();
+        paymentService.updatePayments();
     }
 
 }
