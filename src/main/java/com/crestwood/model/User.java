@@ -22,58 +22,45 @@ public class User {
     private String email;
     private String phone;
 
-    @ApiModelProperty(required = true)
-    private boolean parkingPass;
-    private int unit;
-    private int contractId;
+    private Boolean parkingPass;
+    private Integer unit;
+    private Integer contractId;
     private String gender;
     @ApiModelProperty(dataType = "org.joda.time.LocalDate")
     private Date birthday;
-    private double amountDue;
+    private Double amountDue;
     @Column(name = "paymentPlan")
-    private int paymentPlanId;
+    private Integer paymentPlanId;
     @ManyToOne
     @MapsId("paymentPlanId")
     private PaymentPlan paymentPlan;
     private String customerStripeHash;
     private String bankAccountHash;
-    @ApiModelProperty(required = true)
-    private boolean verifiedBankAccount;
+    private Boolean verifiedBankAccount;
 
 
+    public User(){}
 
+    public User(User u) {
+        userId = u.getUserId();
+        firstName = u.getFirstName();
+        lastName = u.getLastName();
+        email = u.getEmail();
+        phone = u.getPhone();
+        parkingPass = (u.getParkingPass() == null) ? false:u.getParkingPass();
+        unit = (u.getUnit() ==null) ? 1:u.getUnit();
+        contractId = (u.getContractId() == null) ? 1:u.getContractId();
+        gender = u.getGender();
+        birthday = u.getBirthday();
+        amountDue = (u.getAmountDue() == null) ? 0:u.getAmountDue();
+        paymentPlanId = (u.getPaymentPlanId() == null) ? 1:u.getPaymentPlanId();
+        paymentPlan = u.getPaymentPlan();
+        customerStripeHash = u.getCustomerStripeHash();
+        bankAccountHash = u.getBankAccountHash();
+        verifiedBankAccount = (u.getVerifiedBankAccount() == null) ? false:u.getVerifiedBankAccount();
 
-    public String getCustomerStripeHash() {
-        return customerStripeHash;
     }
 
-    public void setCustomerStripeHash(String customerStripeHash) {
-        this.customerStripeHash = customerStripeHash;
-    }
-
-    public String getBankAccountHash() {
-        return bankAccountHash;
-    }
-
-    public void setBankAccountHash(String bankAccountHash) {
-        this.bankAccountHash = bankAccountHash;
-    }
-
-    public boolean isVerifiedBankAccount() {
-        return verifiedBankAccount;
-    }
-
-    public void setVerifiedBankAccount(boolean verifiedBankAccount) {
-        this.verifiedBankAccount = verifiedBankAccount;
-    }
-
-    public int getPaymentPlanId() {
-        return paymentPlanId;
-    }
-
-    public void setPaymentPlanId(int paymentPlanId) {
-        this.paymentPlanId = paymentPlanId;
-    }
 
     public String getUserId() {
         return userId;
@@ -115,27 +102,27 @@ public class User {
         this.phone = phone;
     }
 
-    public boolean isParkingPass() {
+    public Boolean getParkingPass() {
         return parkingPass;
     }
 
-    public void setParkingPass(boolean parkingPass) {
+    public void setParkingPass(Boolean parkingPass) {
         this.parkingPass = parkingPass;
     }
 
-    public int getUnit() {
+    public Integer getUnit() {
         return unit;
     }
 
-    public void setUnit(int unit) {
+    public void setUnit(Integer unit) {
         this.unit = unit;
     }
 
-    public int getContractId() {
+    public Integer getContractId() {
         return contractId;
     }
 
-    public void setContractId(int contractId) {
+    public void setContractId(Integer contractId) {
         this.contractId = contractId;
     }
 
@@ -155,19 +142,51 @@ public class User {
         this.birthday = birthday;
     }
 
-    public double getAmountDue() {
+    public Double getAmountDue() {
         return amountDue;
     }
 
-    public void setAmountDue(double amountDue) {
+    public void setAmountDue(Double amountDue) {
         this.amountDue = amountDue;
     }
+
+    public Integer getPaymentPlanId() {
+        return paymentPlanId;
+    }
+
+    /*public void setPaymentPlanId(Integer paymentPlanId) {
+        this.paymentPlanId = paymentPlanId;
+    }*/
 
     public PaymentPlan getPaymentPlan() {
         return paymentPlan;
     }
 
-    /*public void setPaymentPlan(PaymentPlan paymentPlan) {
+    public void setPaymentPlan(PaymentPlan paymentPlan) {
         this.paymentPlan = paymentPlan;
-    }*/
+    }
+
+    public String getCustomerStripeHash() {
+        return customerStripeHash;
+    }
+
+    public void setCustomerStripeHash(String customerStripeHash) {
+        this.customerStripeHash = customerStripeHash;
+    }
+
+    public String getBankAccountHash() {
+        return bankAccountHash;
+    }
+
+    public void setBankAccountHash(String bankAccountHash) {
+        this.bankAccountHash = bankAccountHash;
+    }
+
+    public Boolean getVerifiedBankAccount() {
+        return verifiedBankAccount;
+    }
+
+    public void setVerifiedBankAccount(Boolean verifiedBankAccount) {
+        this.verifiedBankAccount = verifiedBankAccount;
+    }
 }

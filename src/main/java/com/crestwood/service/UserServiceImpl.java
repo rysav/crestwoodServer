@@ -47,7 +47,8 @@ public class UserServiceImpl extends com.crestwood.service.Service implements Us
         if (temp != null) {
             throw new AlreadyExistsException("User does not exist");
         }
-        userRepository.save(user);
+        User nonNull = new User(user);
+        userRepository.save(nonNull);
 
     }
 
