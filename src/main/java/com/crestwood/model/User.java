@@ -21,6 +21,7 @@ public class User {
     private String lastName;
     private String email;
     private String phone;
+    private String apartmentComplex;
 
     private Boolean parkingPass;
     private Integer unit;
@@ -59,9 +60,18 @@ public class User {
         customerStripeHash = u.getCustomerStripeHash();
         bankAccountHash = u.getBankAccountHash();
         verifiedBankAccount = (u.getVerifiedBankAccount() == null) ? false:u.getVerifiedBankAccount();
+        apartmentComplex = u.getApartmentComplex();
 
     }
 
+
+    public String getApartmentComplex() {
+        return apartmentComplex;
+    }
+
+    public void setApartmentComplex(String apartmentComplex) {
+        this.apartmentComplex = apartmentComplex;
+    }
 
     public String getContractId() {
         return contractId;
