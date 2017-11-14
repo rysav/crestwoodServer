@@ -2,6 +2,7 @@ package com.crestwood.service;
 
 import com.crestwood.exceptions.AlreadyExistsException;
 import com.crestwood.exceptions.NotFoundException;
+import com.crestwood.model.PayDate;
 import com.crestwood.model.PaymentPlan;
 
 import java.sql.Date;
@@ -17,8 +18,8 @@ public interface PaymentPlanService {
     void update(String id, PaymentPlan paymentPlan) throws NotFoundException;
     void delete(String id) throws NotFoundException;
 
-    void addPayDate(String id, Date date) throws AlreadyExistsException;
-    void deletePayDate(String id, Date date) throws NotFoundException;
+    void addPayDate(PayDate payDate) throws AlreadyExistsException;
+    void deletePayDate(PayDate payDate) throws NotFoundException;
 
     PaymentPlan getPayPlanByUserId(String userId);
 }

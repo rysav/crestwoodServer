@@ -1,7 +1,6 @@
 package com.crestwood.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -11,15 +10,17 @@ import java.sql.Date;
 @Embeddable
 public class PayDateKey implements Serializable {
 
+    @Column(name="paymentPlanId")
     private String paymentPlan;
 
 
-    private Date date;
+    private Date dueDate;
+
 
     public PayDateKey(){}
     public PayDateKey(String id, Date date) {
         paymentPlan = id;
-        this.date = date;
+        dueDate = date;
     }
 
     public String getPaymentPlan() {
@@ -30,11 +31,11 @@ public class PayDateKey implements Serializable {
         this.paymentPlan = paymentPlan;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDueDate() {
+        return dueDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 }

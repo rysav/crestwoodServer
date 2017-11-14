@@ -76,20 +76,20 @@ public class PaymentPlanServiceImpl extends Service implements PaymentPlanServic
     }
 
     @Override
-    public void addPayDate(String id, Date date) throws AlreadyExistsException {
-        if (payDateRepository.exists(new PayDateKey(id, date))){
+    public void addPayDate(PayDate payDate) throws AlreadyExistsException {
+        if (payDateRepository.exists(new PayDateKey(payDate.getPayDateKey().getPaymentPlan(), payDate.getPayDateKey().getDueDate()))){
             throw new AlreadyExistsException("Pay date already exists for that pay plan");
         }
-        payDateRepository.save(new PayDate(id, date));
+        payDateRepository.save(payDate);
     }
 
     @Override
-    public void deletePayDate(String id, Date date) throws NotFoundException {
+    public void deletePayDate(PayDate payDate) throws NotFoundException {
 
-        if (!payDateRepository.exists(new PayDateKey(id, date))){
+        if (!payDateRepository.exists(new PayDateKey(payDate.getPayDateKey().getPaymentPlan(), payDate.getPayDateKey().getDueDate()))){
             throw new NotFoundException("Pay date not found for that pay plan");
         }
-        payDateRepository.delete(new PayDateKey(id, date));
+        payDateRepository.delete(payDate);
     }
 
     @Override

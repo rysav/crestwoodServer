@@ -66,12 +66,12 @@ public class PaymentPlanController {
     @ApiOperation(value="add pay date for specified payment plan", response= Iterable.class)
     @RequestMapping(value="/date", method = RequestMethod.POST)
     void addPayDate(PayDate payDate) throws AlreadyExistsException {
-        paymentPlanService.addPayDate(payDate.getPaymentPlanId(), payDate.getDueDate());
+        paymentPlanService.addPayDate(payDate);
     }
 
     @ApiOperation(value="remove pay date for specified payment plan", response= Iterable.class)
     @RequestMapping(value="/date", method = RequestMethod.DELETE)
     void deletePayDate(PayDate payDate) throws AlreadyExistsException, NotFoundException {
-        paymentPlanService.deletePayDate(payDate.getPaymentPlanId(), payDate.getDueDate());
+        paymentPlanService.deletePayDate(payDate);
     }
 }
