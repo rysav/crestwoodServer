@@ -99,13 +99,13 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         int numDaysThisMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         List<User> users = userService.getAllUsers();
         for (User u: users) {
-            PaymentPlan pp = u.getPaymentPlan();
-            if (pp.getDueDate() == dayOfMonth) {
+            PaymentPlan pp = u.getContract().getPaymentPlan();
+           /* if (pp.getDueDate() == dayOfMonth) {
                 //add rent charge
             }
             else if (dayOfMonth == (pp.getDueDate() + pp.getGracePeriod()) % numDaysThisMonth && u.getAmountDue() >= pp.getPayment()) {
                 //add late fee charge --- note that this means partial payments would avoid late fee this month
-            }
+            }*/
         }
 
 

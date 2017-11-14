@@ -2,6 +2,7 @@ package com.crestwood.rest;
 
 import com.crestwood.exceptions.AlreadyExistsException;
 import com.crestwood.exceptions.NotFoundException;
+import com.crestwood.model.PayDate;
 import com.crestwood.model.PaymentPlan;
 import com.crestwood.service.PaymentPlanService;
 import io.swagger.annotations.Api;
@@ -37,7 +38,7 @@ public class PaymentPlanController {
 
     @ApiOperation(value = "gets pay plan by Id", response = Iterable.class)
     @RequestMapping(value="{planId}", method = RequestMethod.GET)
-    PaymentPlan getUser(int id) throws NotFoundException {
+    PaymentPlan getUser(String id) throws NotFoundException {
         return paymentPlanService.getById(id);
     }
 
@@ -51,13 +52,26 @@ public class PaymentPlanController {
 
     @ApiOperation(value = "update payment plan")
     @RequestMapping(method = RequestMethod.PUT)
-    void update(int id, PaymentPlan paymentPlan) throws NotFoundException {
+    void update(String id, PaymentPlan paymentPlan) throws NotFoundException {
         paymentPlanService.update(id, paymentPlan);
     }
 
     @ApiOperation(value = "removes payment plan by Id", response = Iterable.class)
     @RequestMapping(method = RequestMethod.DELETE)
-    void delete(int id) throws NotFoundException {
+    void delete(String id) throws NotFoundException {
         paymentPlanService.delete(id);
+    }
+
+
+    @ApiOperation(value="add pay date for specified payment plan", response= Iterable.class)
+    @RequestMapping(value="/date", method = RequestMethod.POST)
+    void addPayDate(PayDate payDate) throws AlreadyExistsException {
+        paymentPlanService.addPayDate(payDate.getPaymentPlanId(), payDate.getDueDate());
+    }
+
+    @ApiOperation(value="remove pay date for specified payment plan", response= Iterable.class)
+    @RequestMapping(value="/date", method = RequestMethod.DELETE)
+    void deletePayDate(PayDate payDate) throws AlreadyExistsException, NotFoundException {
+        paymentPlanService.deletePayDate(payDate.getPaymentPlanId(), payDate.getDueDate());
     }
 }

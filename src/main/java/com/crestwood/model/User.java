@@ -24,16 +24,18 @@ public class User {
 
     private Boolean parkingPass;
     private Integer unit;
-    private Integer contractId;
+
+    @Column(name="contract")
+    private String contractId;
+    @ManyToOne
+    @MapsId("contractId")
+    private Contract contract;
+
     private String gender;
     @ApiModelProperty(dataType = "org.joda.time.LocalDate")
     private Date birthday;
     private Double amountDue;
-    @Column(name = "paymentPlan")
-    private Integer paymentPlanId;
-    @ManyToOne
-    @MapsId("paymentPlanId")
-    private PaymentPlan paymentPlan;
+
     private String customerStripeHash;
     private String bankAccountHash;
     private Boolean verifiedBankAccount;
@@ -49,18 +51,33 @@ public class User {
         phone = u.getPhone();
         parkingPass = (u.getParkingPass() == null) ? false:u.getParkingPass();
         unit = (u.getUnit() ==null) ? 1:u.getUnit();
-        contractId = (u.getContractId() == null) ? 1:u.getContractId();
+        contractId = (u.getContractId() == null) ? "none":u.getContractId();
+        contract = u.getContract();
         gender = u.getGender();
         birthday = u.getBirthday();
         amountDue = (u.getAmountDue() == null) ? 0:u.getAmountDue();
-        paymentPlanId = (u.getPaymentPlanId() == null) ? 1:u.getPaymentPlanId();
-        paymentPlan = u.getPaymentPlan();
         customerStripeHash = u.getCustomerStripeHash();
         bankAccountHash = u.getBankAccountHash();
         verifiedBankAccount = (u.getVerifiedBankAccount() == null) ? false:u.getVerifiedBankAccount();
 
     }
 
+
+    public String getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
+    }
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    /*public void setContract(Contract contract) {
+        this.contract = contract;
+    }*/
 
     public String getUserId() {
         return userId;
@@ -118,13 +135,7 @@ public class User {
         this.unit = unit;
     }
 
-    public Integer getContractId() {
-        return contractId;
-    }
 
-    public void setContractId(Integer contractId) {
-        this.contractId = contractId;
-    }
 
     public String getGender() {
         return gender;
@@ -150,21 +161,7 @@ public class User {
         this.amountDue = amountDue;
     }
 
-    public Integer getPaymentPlanId() {
-        return paymentPlanId;
-    }
 
-    /*public void setPaymentPlanId(Integer paymentPlanId) {
-        this.paymentPlanId = paymentPlanId;
-    }*/
-
-    public PaymentPlan getPaymentPlan() {
-        return paymentPlan;
-    }
-
-    public void setPaymentPlan(PaymentPlan paymentPlan) {
-        this.paymentPlan = paymentPlan;
-    }
 
     public String getCustomerStripeHash() {
         return customerStripeHash;

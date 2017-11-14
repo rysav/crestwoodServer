@@ -1,10 +1,16 @@
 package com.crestwood.service;
 
+import com.crestwood.exceptions.AlreadyExistsException;
 import com.crestwood.exceptions.NotFoundException;
+import com.crestwood.model.PayDate;
+import com.crestwood.model.PayDateKey;
 import com.crestwood.model.PaymentPlan;
+import com.crestwood.persistance.PayDateRepository;
 import com.crestwood.persistance.PaymentPlanRepository;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -15,10 +21,12 @@ public class PaymentPlanServiceImpl extends Service implements PaymentPlanServic
 
 
     private final PaymentPlanRepository paymentPlanRepository;
+    private final PayDateRepository payDateRepository;
 
     @Autowired
-    public PaymentPlanServiceImpl(PaymentPlanRepository paymentPlanRepository) {
+    public PaymentPlanServiceImpl(PaymentPlanRepository paymentPlanRepository, PayDateRepository payDateRepository) {
         this.paymentPlanRepository = paymentPlanRepository;
+        this.payDateRepository = payDateRepository;
     }
 
     @Override
@@ -27,7 +35,7 @@ public class PaymentPlanServiceImpl extends Service implements PaymentPlanServic
     }
 
     @Override
-    public PaymentPlan getById(int id) throws NotFoundException {
+    public PaymentPlan getById(String id) throws NotFoundException {
         PaymentPlan temp = paymentPlanRepository.findOne(id);
         if (temp == null ) {
             throw new NotFoundException("Payment Plan Not Found");
@@ -44,7 +52,7 @@ public class PaymentPlanServiceImpl extends Service implements PaymentPlanServic
     }
 
     @Override
-    public void update(int id, PaymentPlan paymentPlan) throws NotFoundException {
+    public void update(String id, PaymentPlan paymentPlan) throws NotFoundException {
 
         PaymentPlan temp = paymentPlanRepository.findOne(id);
         if (temp == null) {
@@ -58,7 +66,7 @@ public class PaymentPlanServiceImpl extends Service implements PaymentPlanServic
     }
 
     @Override
-    public void delete(int id) throws NotFoundException {
+    public void delete(String id) throws NotFoundException {
 
         PaymentPlan temp = paymentPlanRepository.findOne(id);
         if (temp == null) {
@@ -68,9 +76,30 @@ public class PaymentPlanServiceImpl extends Service implements PaymentPlanServic
     }
 
     @Override
+    public void addPayDate(String id, Date date) throws AlreadyExistsException {
+        if (payDateRepository.exists(new PayDateKey(id, date))){
+            throw new AlreadyExistsException("Pay date already exists for that pay plan");
+        }
+        payDateRepository.save(new PayDate(id, date));
+    }
+
+    @Override
+    public void deletePayDate(String id, Date date) throws NotFoundException {
+
+        if (!payDateRepository.exists(new PayDateKey(id, date))){
+            throw new NotFoundException("Pay date not found for that pay plan");
+        }
+        payDateRepository.delete(new PayDateKey(id, date));
+    }
+
+    @Override
     public PaymentPlan getPayPlanByUserId(String userId) {
 
 
         return null;
     }
+
+
+
+
 }

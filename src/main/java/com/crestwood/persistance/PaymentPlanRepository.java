@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
  * Created by ryan on 10/14/17.
  */
 @Transactional
-public interface PaymentPlanRepository extends CrudRepository<PaymentPlan, Integer> {
+public interface PaymentPlanRepository extends CrudRepository<PaymentPlan, String> {
 
     @Query(value = "SELECT p.id, p.payment, p.dueDate, p.gracePeriod FROM PaymentPlan p Join user u WHERE userId=:userId", nativeQuery = true)
     //@Query("SELECT p.id, p.payment, p.dueDate, p.gracePeriod FROM PaymentPlan p Join user u ON p.userId = p.userId WHERE userId=:userId")

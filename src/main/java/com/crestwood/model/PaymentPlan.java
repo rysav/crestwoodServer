@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by ryan on 10/14/17.
@@ -13,47 +14,30 @@ import java.util.Collection;
 @Table(name = "paymentPlan")
 public class PaymentPlan implements Serializable{
     @Id
-    @ApiModelProperty(hidden = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private double payment;
-    private int dueDate;
-    private int gracePeriod;
+    private String id;
+
 
     @OneToMany(mappedBy = "paymentPlan", fetch=FetchType.LAZY)
-    private Collection<User> users;
+    private Collection<Contract> contracts;
 
-    public PaymentPlan(){};
+    @OneToMany(mappedBy = "paymentPlanId")
+    private List<PayDate> payDates;
 
-    public int getId() {
+    public PaymentPlan(){}
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public double getPayment() {
-        return payment;
+    public List<PayDate> getPayDates() {
+        return payDates;
     }
 
-    public void setPayment(double payment) {
-        this.payment = payment;
-    }
-
-    public int getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(int dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public int getGracePeriod() {
-        return gracePeriod;
-    }
-
-    public void setGracePeriod(int gracePeriod) {
-        this.gracePeriod = gracePeriod;
-    }
+    /*public void setPayDates(List<PayDate> payDates) {
+        this.payDates = payDates;
+    }*/
 }
