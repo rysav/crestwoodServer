@@ -3,6 +3,7 @@ package com.crestwood.schedule;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.crestwood.mail.GoogleMail;
 import com.crestwood.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import javax.mail.MessagingException;
 
 /**
  * Created by ryan on 10/20/17.
@@ -31,6 +34,7 @@ public class PaymentUpdater {
 
     @Scheduled(cron = "${my.cron.paymentUpdater}")
     public void updatePayments() {
+        System.out.println("timecheck");
         paymentService.updatePayments();
     }
 

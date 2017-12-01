@@ -17,10 +17,10 @@ public class PaymentPlan implements Serializable{
     private String id;
 
 
-    @OneToMany(mappedBy = "paymentPlan", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "paymentPlan", fetch=FetchType.EAGER)
     private Collection<Contract> contracts;
 
-    @OneToMany(mappedBy = "payDateKey.paymentPlan")
+    @OneToMany(mappedBy = "payDateKey.paymentPlan", fetch=FetchType.EAGER)
     private List<PayDate> payDates;
 
     public PaymentPlan(){}

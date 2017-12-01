@@ -2,10 +2,7 @@ package com.crestwood.service;
 
 import com.crestwood.exceptions.NotFoundException;
 import com.crestwood.mail.GoogleMail;
-import com.crestwood.model.PaymentDetails;
-import com.crestwood.model.PaymentPlan;
-import com.crestwood.model.Transaction;
-import com.crestwood.model.User;
+import com.crestwood.model.*;
 import com.crestwood.persistance.PaymentPlanRepository;
 import com.crestwood.persistance.TransactionRepository;
 import com.crestwood.persistance.UserRepository;
@@ -14,9 +11,11 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.mail.MessagingException;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ryan on 10/18/17.
@@ -46,14 +45,14 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     }
 
     @Override
-    public void makePayment(String userId, double amountPaid, String transactionNum, java.util.Date timeStamp, String notes) throws NotFoundException {
+    public void makePayment(String userId, double amountPaid, String transactionNum, java.util.Date timeStamp, String notes, String method) throws NotFoundException {
         User user = userService.getUser(userId);
         user.setAmountDue(user.getAmountDue() - amountPaid);
         //check for if they paid too much?
         Transaction transaction = new Transaction();
         transaction.setUserId(userId);
         transaction.setAmount(0 - amountPaid);
-        transaction.setMethod("Online");
+        transaction.setMethod(method);
         transaction.setDescription(notes);
         transaction.setTransactionNum(transactionNum);
         transaction.setTime(timeStamp);
@@ -99,16 +98,58 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         int numDaysThisMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         List<User> users = userService.getAllUsers();
         for (User u: users) {
-            PaymentPlan pp = u.getContract().getPaymentPlan();
-           /* if (pp.getDueDate() == dayOfMonth) {
-                //add rent charge
+            if (handleContract(u)) {
+                handlePayment(u);
             }
-            else if (dayOfMonth == (pp.getDueDate() + pp.getGracePeriod()) % numDaysThisMonth && u.getAmountDue() >= pp.getPayment()) {
-                //add late fee charge --- note that this means partial payments would avoid late fee this month
-            }*/
+
         }
+    }
 
+    public void handlePayment(User user) {
+        Contract contract = user.getContract();
+        if(contract.getPaymentPlan() == null || contract.getPaymentPlanId() == "none") {
+            return;
+        }
+        PaymentPlan paymentPlan = contract.getPaymentPlan();
+        List<PayDate> dates = (List<PayDate>) paymentPlan.getPayDates();
+        double amountDue = Math.round((contract.getFullAmountDue()/dates.size()) * 100.00) / 100.00;
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        Date current = new Date();
 
+        for (PayDate payDate: dates) {
+            Date date =  payDate.getPayDateKey().getDueDate();
+            cal1.setTime(current);
+            cal2.setTime(date);
+            if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)) {
+                try {
+                    addCharge(user.getUserId(), amountDue, "Rent Charge");
+                } catch (NotFoundException e) {
+                    //add log -- this shouldn't happen
+                }
+            }
+        }
+    }
 
+    public boolean handleContract(User user) {
+        if (user.getContractId().equals("none") || user.getContract() == null) {
+            return false;
+        }
+        Date currentDate = new Date();
+        Date startDate = user.getContract().getStartDate();
+        Date endDate = user.getContract().getEndDate();
+        if (currentDate.before(startDate) || currentDate.after(endDate)) {
+            long diff = currentDate.getTime() - endDate.getTime();
+            int days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            if (days > 60) {
+                try {
+                    userService.deleteUser(user.getUserId());
+                } catch (NotFoundException e) {
+                    //log this -- shouldn't come here
+                }
+                return false;
+            }
+        }
+        return true;
     }
 }

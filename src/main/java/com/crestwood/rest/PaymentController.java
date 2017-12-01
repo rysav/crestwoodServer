@@ -30,14 +30,14 @@ public class PaymentController {
 
     @ApiOperation(value = "Makes payment for specific user", response = Iterable.class)
     @RequestMapping(value="/makePayment", method = RequestMethod.POST)
-    void makePayment(String userId, double amountPaid, String transactionNum, Date timeStamp, String notes) throws NotFoundException {
-         paymentService.makePayment(userId, amountPaid, transactionNum, timeStamp, notes);
+    void makePayment(String userId, double amountPaid, String transactionNum, Date timeStamp, String description, String method) throws NotFoundException {
+         paymentService.makePayment(userId, amountPaid, transactionNum, timeStamp, description, method);
     }
 
     @ApiOperation(value = "adds charge to specific user", response = Iterable.class)
     @RequestMapping(value="/addCharge", method = RequestMethod.POST)
-    void addCharge(String userId, double amountCharge, String notes) throws NotFoundException  {
-        paymentService.addCharge(userId, amountCharge, notes);
+    void addCharge(String userId, double amountCharge, String description) throws NotFoundException  {
+        paymentService.addCharge(userId, amountCharge, description);
     }
 
     @ApiOperation(value = "gets how much is owed and transaction history for specific user", response = Iterable.class)
