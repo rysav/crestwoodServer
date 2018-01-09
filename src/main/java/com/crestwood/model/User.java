@@ -24,7 +24,7 @@ public class User {
     private String apartmentComplex;
 
     private Boolean parkingPass;
-    private Integer unit;
+    private String unit;
 
     @Column(name="contract")
     private String contractId;
@@ -51,7 +51,7 @@ public class User {
         email = u.getEmail();
         phone = u.getPhone();
         parkingPass = (u.getParkingPass() == null) ? false:u.getParkingPass();
-        unit = (u.getUnit() ==null) ? 1:u.getUnit();
+        unit = u.getUnit();
         contractId = (u.getContractId() == null) ? "none":u.getContractId();
         contract = u.getContract();
         gender = u.getGender();
@@ -137,11 +137,11 @@ public class User {
         this.parkingPass = parkingPass;
     }
 
-    public Integer getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(Integer unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 

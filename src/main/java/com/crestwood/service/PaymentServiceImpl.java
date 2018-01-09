@@ -116,18 +116,47 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         Date current = new Date();
+        cal1.setTime(current);
 
         for (PayDate payDate: dates) {
             Date date =  payDate.getPayDateKey().getDueDate();
-            cal1.setTime(current);
             cal2.setTime(date);
-            if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)) {
+            int thisMonth = cal1.get(Calendar.MONTH);
+            int thisDay = cal1.get(Calendar.DAY_OF_MONTH);
+            int payMonth = cal2.get(Calendar.MONTH);
+            int payDay = cal2.get(Calendar.DAY_OF_MONTH);
+            double fee = 0;
+            int difference = 0;
+            if (thisMonth == payMonth) {
+                difference = payDay - thisDay;
+
+            } else if ((thisMonth - 1) % 12 == payMonth) {
+                int daysInPayMonth = cal1.getActualMaximum(payMonth);
+                int preflow = daysInPayMonth - payDay;
+                difference = preflow + thisDay;
+            }
+
+            if (difference == 0) {
                 try {
                     addCharge(user.getUserId(), amountDue, "Rent Charge");
                 } catch (NotFoundException e) {
                     //add log -- this shouldn't happen
                 }
+                fee = 0;
+            } else if (difference == 2 && user.getAmountDue() >= amountDue) {
+                fee = 10;
+            } else if (difference > 2 && difference <= 8 && user.getAmountDue() >= amountDue) {
+                fee = 5;
             }
+
+            if (fee != 0) {
+                try {
+                    addCharge(user.getUserId(), fee, "Late Rent Fee");
+                } catch (NotFoundException e) {
+                    //add log -- this shouldn't happen
+                }
+            }
+
         }
     }
 
