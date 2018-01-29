@@ -15,6 +15,6 @@ public interface ContractService {
     List<Contract> getAll();
     Contract getById(String id) throws NotFoundException;
     void add(Contract contract) throws AlreadyExistsException;
-    void update(String id, Contract contract) throws NotFoundException;
+    void update(Contract contract) throws NotFoundException;
     void delete(String id) throws NotFoundException;
 }

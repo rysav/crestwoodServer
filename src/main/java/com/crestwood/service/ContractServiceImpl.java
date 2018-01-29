@@ -47,9 +47,9 @@ public class ContractServiceImpl extends Service implements ContractService {
     }
 
     @Override
-    public void update(String id, Contract contract) throws NotFoundException {
+    public void update(Contract contract) throws NotFoundException {
 
-        Contract temp = contractRepository.findOne(id);
+        Contract temp = contractRepository.findOne(contract.getId());
         if (temp == null) {
             throw new NotFoundException("Contract Not Found");
         }

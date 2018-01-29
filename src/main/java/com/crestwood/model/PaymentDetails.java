@@ -11,10 +11,12 @@ public class PaymentDetails {
 
 
     private double amountDue;
+    private double amountLeftOnContract;
     private List<Transaction> transactionHistory;
 
-    public PaymentDetails(double amountDue, List<Transaction> transactionHistory) {
+    public PaymentDetails(double amountDue, double totalDue, List<Transaction> transactionHistory) {
         this.amountDue = amountDue;
+        this.amountLeftOnContract = totalDue;
         this.transactionHistory = transactionHistory;
     }
 
@@ -32,5 +34,13 @@ public class PaymentDetails {
 
     public void setTransactionHistory(List<Transaction> transactionHistory) {
         this.transactionHistory = transactionHistory;
+    }
+
+    public double getAmountLeftOnContract() {
+        return amountLeftOnContract;
+    }
+
+    public void setAmountLeftOnContract(double amountLeftOnContract) {
+        this.amountLeftOnContract = amountLeftOnContract;
     }
 }

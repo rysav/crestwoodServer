@@ -20,7 +20,10 @@ public class Contract {
     private Double deposit;
     private Double refundable;
     private Double fullAmountDue;
-
+    private Double extraCharges = Double.valueOf(0);
+    private Double amountPaid = Double.valueOf(0);
+    @Transient
+    private double leftToPay;
 
     @Column(name = "paymentPlan")
     private String paymentPlanId;
@@ -92,4 +95,26 @@ public class Contract {
     /*public void setPaymentPlan(PaymentPlan paymentPlan) {
         this.paymentPlan = paymentPlan;
     }*/
+
+    public Double getExtraCharges() {
+        return extraCharges;
+    }
+
+    public void setExtraCharges(Double extraCharges) {
+        this.extraCharges = extraCharges;
+    }
+
+    public Double getAmountPaid() {
+        return amountPaid;
+    }
+
+    public void setAmountPaid(Double amountPaid) {
+        this.amountPaid = amountPaid;
+    }
+
+    public double getLeftToPay() {
+        if (extraCharges == null ) {extraCharges = Double.valueOf(0);}
+        if (amountPaid == null) {amountPaid = Double.valueOf(0);}
+        return (fullAmountDue + extraCharges - amountPaid);
+    }
 }

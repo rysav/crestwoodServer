@@ -50,8 +50,8 @@ public class ContractController {
 
     @ApiOperation(value = "update contract")
     @RequestMapping(method = RequestMethod.PUT)
-    void update(String id, Contract contract) throws NotFoundException {
-        contractService.update(id, contract);
+    void update(Contract contract) throws NotFoundException {
+        contractService.update(contract);
     }
 
     @ApiOperation(value = "removes contract by Id", response = Iterable.class)

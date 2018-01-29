@@ -29,6 +29,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     private final PaymentPlanRepository paymentPlanRepository;
     private final UserService userService;
     private final TransactionService transactionService;
+    private final String RENT_DUE = "Rent Charge";
 
     @Value("${email.username}")
     private String username;
@@ -48,6 +49,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     public void makePayment(String userId, double amountPaid, String transactionNum, java.util.Date timeStamp, String notes, String method) throws NotFoundException {
         User user = userService.getUser(userId);
         user.setAmountDue(user.getAmountDue() - amountPaid);
+        user.getContract().setAmountPaid(user.getContract().getAmountPaid() + amountPaid);
         //check for if they paid too much?
         Transaction transaction = new Transaction();
         transaction.setUserId(userId);
@@ -71,7 +73,8 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     @Override
     public PaymentDetails getPaymentDetails(String userId) throws NotFoundException {
 
-        return new PaymentDetails(userService.getUser(userId).getAmountDue(), transactionService.getByUserId(userId));
+        User u = userService.getUser(userId);
+        return new PaymentDetails(u.getAmountDue(), u.getContract().getLeftToPay(),  transactionService.getByUserId(userId));
     }
 
     @Override
@@ -79,6 +82,9 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
         User user = userService.getUser(userId);
         user.setAmountDue(user.getAmountDue() + amountCharge);
+        if (!notes.equals(RENT_DUE)) {
+            user.getContract().setExtraCharges(user.getContract().getExtraCharges() + amountCharge);
+        }
         Transaction transaction = new Transaction();
         transaction.setUserId(userId);
         transaction.setAmount(amountCharge);
@@ -138,7 +144,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
 
             if (difference == 0) {
                 try {
-                    addCharge(user.getUserId(), amountDue, "Rent Charge");
+                    addCharge(user.getUserId(), amountDue, RENT_DUE);
                 } catch (NotFoundException e) {
                     //add log -- this shouldn't happen
                 }
