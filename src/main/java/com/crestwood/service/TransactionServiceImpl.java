@@ -2,6 +2,7 @@ package com.crestwood.service;
 
 import com.crestwood.exceptions.NotFoundException;
 import com.crestwood.model.Transaction;
+import com.crestwood.model.User;
 import com.crestwood.persistance.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,10 +16,12 @@ public class TransactionServiceImpl extends Service implements TransactionServic
 
 
     private final TransactionRepository transactionRepository;
+    private final UserService userService;
 
     @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository, UserService userService) {
         this.transactionRepository = transactionRepository;
+        this.userService = userService;
     }
 
 
@@ -64,7 +67,21 @@ public class TransactionServiceImpl extends Service implements TransactionServic
         if (!transactionRepository.exists(id)) {
             throw new NotFoundException("Transaction does not exist");
         }
+        Transaction transaction = transactionRepository.findOne(id);
+        if (transaction.getTransactionNum() != null && !transaction.getTransactionNum().equals("Auto")) {
+            throw new NotFoundException("Cannot delete paid transactions");
+        }
+        User user = userService.getUser(transaction.getUserId());
+        user.setAmountDue(user.getAmountDue() + (transaction.getAmount() * -1));
+        if (!transaction.getDescription().equals("Rent Charge")) {
+            if (transaction.getAmount() < 0) {
+                user.getContract().setAmountPaid(user.getContract().getAmountPaid() + (transaction.getAmount()));
+            } else {
+                user.getContract().setExtraCharges(user.getContract().getExtraCharges() + (transaction.getAmount() * -1));
+            }
+        }
         transactionRepository.delete(id);
+
     }
 
     @Override
@@ -72,4 +89,6 @@ public class TransactionServiceImpl extends Service implements TransactionServic
 
         return transactionRepository.findByUserIdLike(userId);
     }
+
+
 }
