@@ -36,8 +36,6 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     private final TransactionService transactionService;
     private final String RENT_DUE = "Rent Charge";
 
-    @Autowired
-    JavaMailSender emailSender;
 
 
     @Value("${email.username}")
