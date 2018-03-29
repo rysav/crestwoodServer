@@ -64,4 +64,11 @@ public class UserController {
     void deleteUser(String userId) throws NotFoundException {
         userService.deleteUser(userId);
     }
+
+    @ApiOperation(value = "sends an email to all users. Returns list of users who's emails failed", response = Iterable.class)
+    @RequestMapping(value = "/email", method = RequestMethod.POST)
+    List<User> sendMassEmail(String message, String title) throws NotFoundException {
+        return userService.sendMassEmail(message, title);
+    }
+
 }

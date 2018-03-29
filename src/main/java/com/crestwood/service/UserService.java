@@ -17,4 +17,6 @@ public interface UserService {
     void updateUser(User user) throws NotFoundException;
     void deleteUser(String userId) throws NotFoundException;
     List<User> getPossibleUsers(String subString);
+
+    List<User> sendMassEmail(String message, String title) throws NotFoundException;
 }

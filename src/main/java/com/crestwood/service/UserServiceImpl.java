@@ -2,11 +2,14 @@ package com.crestwood.service;
 
 import com.crestwood.exceptions.AlreadyExistsException;
 import com.crestwood.exceptions.NotFoundException;
+import com.crestwood.mail.GoogleMail;
 import com.crestwood.model.User;
 import com.crestwood.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +20,11 @@ import java.util.List;
 public class UserServiceImpl extends com.crestwood.service.Service implements UserService {
 
     private final UserRepository userRepository;
+
+    @Value("${email.username}")
+    private String username;
+    @Value("${email.password}")
+    private String password;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -92,5 +100,20 @@ public class UserServiceImpl extends com.crestwood.service.Service implements Us
             }
         }
         return toReturn;
+    }
+
+    @Override
+    public List<User> sendMassEmail(String message, String title) throws NotFoundException {
+        List<User> users = (List<User>) userRepository.findAll();
+        List<User> failedUsers = new ArrayList<User>();
+        for (User u : users) {
+            try {
+                GoogleMail.Send(username, password, u.getEmail(), title, message);
+            } catch (MessagingException e) {
+                //invalid email
+                failedUsers.add(u);
+            }
+        }
+        return failedUsers;
     }
 }

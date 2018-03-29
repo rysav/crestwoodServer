@@ -6,15 +6,18 @@ import com.crestwood.model.*;
 import com.crestwood.persistance.PaymentPlanRepository;
 import com.crestwood.persistance.TransactionRepository;
 import com.crestwood.persistance.UserRepository;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.mail.MessagingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.List;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,9 +30,15 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
     private final PaymentPlanRepository paymentPlanRepository;
+
+
     private final UserService userService;
     private final TransactionService transactionService;
     private final String RENT_DUE = "Rent Charge";
+
+    @Autowired
+    JavaMailSender emailSender;
+
 
     @Value("${email.username}")
     private String username;
@@ -37,7 +46,8 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     private String password;
 
     @Autowired
-    public PaymentServiceImpl(UserRepository userRepository, TransactionRepository transactionRepository, PaymentPlanRepository paymentPlanRepository, UserService userService, TransactionService transactionService) {
+    public PaymentServiceImpl(UserRepository userRepository, TransactionRepository transactionRepository, PaymentPlanRepository paymentPlanRepository,
+                              UserService userService, TransactionService transactionService) {
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
         this.paymentPlanRepository = paymentPlanRepository;
@@ -63,11 +73,13 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         transactionService.add(transaction);
         String emailMessage = "Your payment of " + amountPaid + " has been received and recorded.";
 
+
         try {
             GoogleMail.Send(username, password, user.getEmail(), "Payment Confirmation", emailMessage);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            //invalid email
         }
+
     }
 
     @Override
