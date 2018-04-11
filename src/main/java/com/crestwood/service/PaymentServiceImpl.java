@@ -142,7 +142,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
             int payMonth = cal2.get(Calendar.MONTH);
             int payDay = cal2.get(Calendar.DAY_OF_MONTH);
             double fee = 0;
-            int difference = 0;
+            int difference = -1;
             if (thisMonth == payMonth) {
                 difference = payDay - thisDay;
 
