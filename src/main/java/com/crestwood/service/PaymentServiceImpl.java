@@ -42,6 +42,8 @@ public class PaymentServiceImpl extends Service implements PaymentService {
     private String username;
     @Value("${email.password}")
     private String password;
+    @Value("${email.admin}")
+    private String adminEmail;
 
     @Autowired
     public PaymentServiceImpl(UserRepository userRepository, TransactionRepository transactionRepository, PaymentPlanRepository paymentPlanRepository,
@@ -70,10 +72,12 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         userService.updateUser(user);
         transactionService.add(transaction);
         String emailMessage = "Your payment of " + amountPaid + " has been received and recorded.";
+        String adminReceiptMessage = "Payment of " + amountPaid + " was made by user: " + userId;
 
 
         try {
             GoogleMail.Send(username, password, user.getEmail(), "Payment Confirmation", emailMessage);
+            GoogleMail.Send(username, password, adminEmail, userId + " Payment Receipt", adminReceiptMessage);
         } catch (MessagingException e) {
             //invalid email
         }

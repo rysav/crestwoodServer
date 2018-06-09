@@ -6,6 +6,8 @@ import com.crestwood.model.User;
 import com.crestwood.persistance.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +45,9 @@ public class TransactionServiceImpl extends Service implements TransactionServic
     public void add(Transaction transaction) {
 
         //TO DO check for existing transaction
+        if (transaction.getTime() == null) {
+            transaction.setTime(new Date(Calendar.getInstance().getTime().getTime()));
+        }
         transactionRepository.save(transaction);
 
     }
