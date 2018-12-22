@@ -151,7 +151,7 @@ public class PaymentServiceImpl extends Service implements PaymentService {
                 difference = payDay - thisDay;
 
             } else if ((thisMonth - 1) % 12 == payMonth) {
-                int daysInPayMonth = cal1.getActualMaximum(payMonth);
+                int daysInPayMonth = cal1.getActualMaximum(Calendar.DAY_OF_MONTH);
                 int preflow = daysInPayMonth - payDay;
                 difference = preflow + thisDay;
             }
