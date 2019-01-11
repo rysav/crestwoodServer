@@ -6,17 +6,10 @@ import com.crestwood.model.*;
 import com.crestwood.persistance.PaymentPlanRepository;
 import com.crestwood.persistance.TransactionRepository;
 import com.crestwood.persistance.UserRepository;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -132,52 +125,67 @@ public class PaymentServiceImpl extends Service implements PaymentService {
         }
         PaymentPlan paymentPlan = contract.getPaymentPlan();
         List<PayDate> dates = (List<PayDate>) paymentPlan.getPayDates();
-        double amountDue = Math.round((contract.getFullAmountDue()/dates.size()) * 100.00) / 100.00;
-        Calendar cal1 = Calendar.getInstance();
-        Calendar cal2 = Calendar.getInstance();
-        Date current = new Date();
-        cal1.setTime(current);
+        double rentAmount = Math.round((contract.getFullAmountDue()/dates.size()) * 100.00) / 100.00;
 
         for (PayDate payDate: dates) {
             Date date =  payDate.getPayDateKey().getDueDate();
-            cal2.setTime(date);
-            int thisMonth = cal1.get(Calendar.MONTH);
-            int thisDay = cal1.get(Calendar.DAY_OF_MONTH);
-            int payMonth = cal2.get(Calendar.MONTH);
-            int payDay = cal2.get(Calendar.DAY_OF_MONTH);
-            double fee = 0;
-            int difference = -1;
-            if (thisMonth == payMonth) {
-                difference = payDay - thisDay;
-
-            } else if ((thisMonth - 1) % 12 == payMonth) {
-                int daysInPayMonth = cal1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                int preflow = daysInPayMonth - payDay;
-                difference = preflow + thisDay;
-            }
-
-            if (difference == 0) {
-                try {
-                    addCharge(user.getUserId(), amountDue, RENT_DUE);
-                } catch (NotFoundException e) {
-                    //add log -- this shouldn't happen
-                }
-                fee = 0;
-            } else if (difference == 2 && user.getAmountDue() >= amountDue) {
-                fee = 10;
-            } else if (difference > 2 && difference <= 8 && user.getAmountDue() >= amountDue) {
-                fee = 5;
-            }
+            int difference = calcDifference(new Date(), date);
+            double fee = calcFee(difference, rentAmount, user.getAmountDue());
+            String message = calcMessage(fee, rentAmount);
 
             if (fee != 0) {
                 try {
-                    addCharge(user.getUserId(), fee, "Late Rent Fee");
+                    addCharge(user.getUserId(), fee, message);
                 } catch (NotFoundException e) {
                     //add log -- this shouldn't happen
                 }
             }
 
         }
+    }
+
+    public String calcMessage(double fee, double rentAmount) {
+        if (fee == rentAmount) {
+            return RENT_DUE;
+        } else if (fee == 0) {
+            return "";
+        } else {
+            return "Late Rent Fee";
+        }
+    }
+
+    public int calcDifference(Date thisDate, Date dueDate) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(thisDate);
+        cal2.setTime(dueDate);
+        int thisMonth = cal1.get(Calendar.MONTH);
+        int thisDay = cal1.get(Calendar.DAY_OF_MONTH);
+        int payMonth = cal2.get(Calendar.MONTH);
+        int payDay = cal2.get(Calendar.DAY_OF_MONTH);
+        int difference = -1;
+        if (thisMonth == payMonth) {
+            difference = thisDay - payDay;
+
+        } else if ((((thisMonth - 1) % 12) + 12) % 12 == payMonth) {
+            int daysInPayMonth = cal2.getActualMaximum(Calendar.DAY_OF_MONTH);
+            int preflow = daysInPayMonth - payDay;
+            difference = preflow + thisDay;
+        }
+
+        return difference;
+    }
+
+    public double calcFee(int difference, double rentAmount, double amountOwed) {
+        double fee = 0;
+        if (difference == 0) {
+            fee = rentAmount;
+        } else if (difference == 2 && amountOwed >= rentAmount) {
+            fee = 10;
+        } else if (difference > 2 && difference <= 8 && amountOwed >= rentAmount) {
+            fee = 5;
+        }
+        return fee;
     }
 
     public boolean handleContract(User user) {
